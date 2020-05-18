@@ -8,6 +8,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
+const auth = require("../middleware/auth");
+
 //Routes go here
 router.post(
     "/register",
@@ -15,6 +17,7 @@ router.post(
         check("email", "Invalid email").isEmail(),
         check("name", "Name is required").notEmpty(),
         check("password", "Password must be 6 chars long").isLength({ min: 6 }),
+        check("dob", "Invalid input").isEmpty(),
         check("mobile", "Invalid mobile number").isLength({ min: 10, max: 10 }),
         check("aadhar_card", "Invalid aadhar number").isLength({
             min: 14,
@@ -26,7 +29,7 @@ router.post(
         if (!error.isEmpty()) {
             return res.status(400).json({ error: error.array() });
         }
-        const { email, name, password, mobile, aadhar_card } = req.body;
+        const { email, name, dob, password, mobile, aadhar_card } = req.body;
 
         try {
             var user = await User.findOne({ email });
@@ -53,6 +56,7 @@ router.post(
             user = new User({
                 email,
                 name,
+                dob,
                 password,
                 mobile,
                 aadhar_card,
@@ -122,5 +126,15 @@ router.post(
         }
     }
 );
+
+router.get("/", auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select("-password");
+        res.json(user);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    }
+});
 
 module.exports = router;

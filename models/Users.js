@@ -24,6 +24,11 @@ var userSchema = new Schema({
         unique: true,
     },
 
+    dob: {
+        type: String,
+        required: true,
+    },
+
     aadhar_card: {
         type: String,
         unique: true,
