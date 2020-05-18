@@ -1,3 +1,4 @@
 {
-    "mongoURI":"mongodb+srv://pratik_gl:lolalola@cluster0-xddtf.gcp.mongodb.net/test?retryWrites=true&w=majority"
+	"mongoURI": "mongodb+srv://pratik_gl:lolalola@cluster0-xddtf.gcp.mongodb.net/test?retryWrites=true&w=majority",
+	"jwtSecret": "qwerty"
 }
